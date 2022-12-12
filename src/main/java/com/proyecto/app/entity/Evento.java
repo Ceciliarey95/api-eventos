@@ -1,7 +1,7 @@
 package com.proyecto.app.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,21 +10,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +36,7 @@ public class Evento implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable=false, unique = true)
 	private Long id;
-	@Column(length =30, unique=true)
+	@Column(unique=true)
 	private String name;
 	private String direccion;
 	private Boolean activo;
@@ -53,13 +48,10 @@ public class Evento implements Serializable{
 	private Boolean eventoUnico;
 	@Column(unique=true)
 	@DateTimeFormat(pattern="dd-MM-yyyy")
-	private LocalDate fechaEvento;
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "organizacion_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Organizacion organizacion;	
+	private LocalDateTime fechaEvento;
 	@OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Turno> turnos;
+	
 
 
 	@PrePersist

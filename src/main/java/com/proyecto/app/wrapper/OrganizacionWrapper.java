@@ -11,7 +11,7 @@ public class OrganizacionWrapper {
 		Organizacion entity = new Organizacion();
 		entity.setClave(dto.getClave());
 		entity.setCuit(dto.getCuit());
-		entity.setNombre(dto.getNombre());
+		entity.setName(dto.getName());
 		entity.setEmail(dto.getEmail());
 		entity.setDireccion(dto.getDireccion());
 		entity.setDeleted(Boolean.FALSE);
@@ -25,7 +25,7 @@ public class OrganizacionWrapper {
 		OrganizacionDto dto = new OrganizacionDto();
 		dto.setClave(entity.getClave());
 		dto.setCuit(entity.getCuit());
-		dto.setNombre(entity.getNombre());
+		dto.setName(entity.getName());
 		dto.setEmail(entity.getEmail());
 		dto.setDireccion(entity.getDireccion());	
 		

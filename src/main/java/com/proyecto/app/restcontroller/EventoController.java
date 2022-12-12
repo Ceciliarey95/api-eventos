@@ -1,7 +1,6 @@
 package com.proyecto.app.restcontroller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -41,9 +40,7 @@ public class EventoController {
 	}
 
 	@PostMapping("/registro")
-	public ResponseEntity<Map<String, Object>> newEvento( @RequestBody @Valid EventoDto eventoDto) throws Exception{
-		
-		log.info("Evento: "+eventoDto.toString());
+	public ResponseEntity<Map<String, Object>> newEvento( @RequestBody @Valid EventoDto eventoDto) {
 		Map<String, Object> response = new HashMap<>();
 		EventoDto newEvento = eventoService.save(eventoDto);
 		response.put("Evento: ", newEvento);
@@ -52,30 +49,33 @@ public class EventoController {
 	
 	@PutMapping("/updateEvento/{nombre}")
 	public ResponseEntity<Map<String, Object>> update(@RequestBody EventoDto eventoDto){
-		log.info("Evento: "+eventoDto.toString());
 		Map<String, Object> response = new HashMap<>();
 		EventoDto updateEvento = eventoService.update(eventoDto);
-		
 		if(updateEvento == null) {
 			response.put("mensaje", "No se pudo actualizar la informacion del evento.");
 		}
-		
 		response.put("Evento: ", updateEvento);
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/delete/{nombre}")
-	  public ResponseEntity<Map<String, Object>> deleteOrg(@PathVariable(name = "nombre") String nombre) {
+	@DeleteMapping("/delete/{name}")
+	  public ResponseEntity<Map<String, Object>> deleteOrg(@PathVariable(name = "name") String name) {
+		System.out.println(name);
 		Map<String, Object> response = new HashMap<>();
-		Evento evento = eventoService.findByName(nombre);
+		Evento evento = eventoService.findByName(name);
+		System.out.println(evento);
 		EventoDto eventoDto = EventoWrapper.entityToDto(evento);
 		EventoDto updateEvento = eventoService.delete(eventoDto);
 		if(updateEvento == null) {
 			response.put("mensaje", "No se pudo borrar la informacion del evento porque no existe.");
-		}
+		}else {
 		
-		response.put("Evento eliminado: ", updateEvento);
+		response.put("Evento eliminado: ", updateEvento);}
 		
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	  }
+
+	public static Logger getLog() {
+		return log;
+	}
 }

@@ -1,9 +1,8 @@
 package com.proyecto.app.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,19 +32,21 @@ public class Turno implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable=false, unique = true)
 	private Long id;
-	@Column(name="fecha_hora")
-	private Date fechaHora;
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "evento_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Evento evento;
+	@Column(name="fecha_hora",unique=true,nullable = false)
+	@DateTimeFormat(pattern="dd-MM-yyyy")
+	private LocalDateTime fechaHora;
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "usuario_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Usuario usuario;
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "evento_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Evento evento;
 	private Boolean activo;
 	@Column(unique=true, nullable = false)
 	private String codigo = cadenaAleatoria(5); 
+	
 	
     public static String cadenaAleatoria(int longitud) {
         String banco = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

@@ -1,14 +1,9 @@
 package com.proyecto.app.dto;
 
-import java.time.LocalDate;
-
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.time.LocalDateTime;
 import javax.validation.constraints.Size;
-
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +23,6 @@ public class EventoDto {
 	private String name;
 	private String direccion;
 	private Boolean eventoUnico;
-	@Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern="dd-MM-yyyy")
-	private LocalDate fechaEvento;
+	private LocalDateTime fechaEvento;
 }

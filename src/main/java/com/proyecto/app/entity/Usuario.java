@@ -27,7 +27,7 @@ public class Usuario implements Serializable{
 	@Column(length =30)
 	private String lastname; 
 	@Column(unique=true)
-	private Integer dni;
+	private Long dni;
 	@Column(unique=true)
 	private String clave;
 	private Boolean deleted;

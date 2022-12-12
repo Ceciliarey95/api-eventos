@@ -17,11 +17,13 @@ public interface IUsuarioService {
 		
 		public List<Usuario> findByLastname(String lastname);
 		
-		public UsuarioDto findByDni(Integer dni);
+		public UsuarioDto findByDni(Long dni);
 
 		public UsuarioDto update(UsuarioDto usuarioDto);
 
 		public UsuarioDto delete(UsuarioDto usuarioDto);
+
+		public Usuario findByClave(String clave);
 
 		
 }

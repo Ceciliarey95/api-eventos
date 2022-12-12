@@ -21,7 +21,7 @@ public class OrganizacionDto {
 	
 	@NotBlank(message = "El campo nombre no puede estar vacio")
 	@Size( max= 20, message = "El nombre no debe ser mayor a 20.")
-	private String nombre;
+	private String name;
 	@NotNull(message="El campo cuit no puede ser nulo")
 	private Long cuit;
 	@NotBlank(message = "El campo clave no puede estar vacio")

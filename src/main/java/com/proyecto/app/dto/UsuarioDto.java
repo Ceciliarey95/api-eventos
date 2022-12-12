@@ -30,6 +30,6 @@ public class UsuarioDto {
 	@NotNull(message="El campo dni no puede ser nulo")
 	@Min(value= 7, message="El dni no debe contener menos de 7 caracteres")
 	@Max(value=8, message="El dni no debe contener más de 8 caracteres")
-	private Integer dni;
+	private Long dni;
 	private String clave;
 }

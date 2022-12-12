@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.proyecto.app.dto.UsuarioDto;
 import com.proyecto.app.entity.Usuario;
 import com.proyecto.app.repository.IUsuarioDao;
@@ -48,9 +47,14 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	@Override
-	public UsuarioDto findByDni(Integer dni) {
+	public UsuarioDto findByDni(Long dni) {
 		Usuario usuario = usuarioDao.findByDni(dni);
 		return UsuarioWrapper.entityToDto(usuario);
+	}
+	@Override
+	public Usuario findByClave(String clave) {
+		Usuario usuario = usuarioDao.findByClave(clave);
+		return usuario;
 	}
 
 	@Override

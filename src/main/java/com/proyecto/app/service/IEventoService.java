@@ -9,7 +9,7 @@ public interface IEventoService {
 
 	public List<Evento> getAll();
 	
-	public Evento findByName(String nombre);
+	public Evento findByName(String name);
 	
 	public EventoDto save(EventoDto evento);
 	

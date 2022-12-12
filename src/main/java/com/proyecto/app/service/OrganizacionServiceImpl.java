@@ -29,8 +29,8 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 	}
 
 	@Override
-	public Organizacion findByNombre(String nombre) {
-		Organizacion organizacion = organizacionDao.findByNombre(nombre);
+	public Organizacion findByName(String name) {
+		Organizacion organizacion = organizacionDao.findByName(name);
 		return organizacion;
 	}
 	
@@ -50,7 +50,7 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 			
 			entityToPersist.setId(orgExist.getId());
 			entityToPersist.setCuit(organizacionDto.getCuit());
-			entityToPersist.setNombre(organizacionDto.getNombre());
+			entityToPersist.setName(organizacionDto.getName());
 			entityToPersist.setClave(organizacionDto.getClave());
 			entityToPersist.setEmail(organizacionDto.getEmail());
 			entityToPersist.setDireccion(organizacionDto.getDireccion());
@@ -72,7 +72,7 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 			
 			entityToPersist.setId(orgExist.getId());
 			entityToPersist.setCuit(orgExist.getCuit());
-			entityToPersist.setNombre(orgExist.getNombre());
+			entityToPersist.setName(orgExist.getName());
 			entityToPersist.setClave(orgExist.getClave());
 			entityToPersist.setEmail(orgExist.getEmail());
 			entityToPersist.setDireccion(orgExist.getDireccion());
@@ -96,6 +96,20 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 		
 		return orgExist;
 	}
+
+	@Override
+	public Organizacion findByClave(String clave) {
+		Organizacion organizacion = organizacionDao.findByClave(clave);
+		return organizacion;
+	}
+
+	@Override
+	public List<Organizacion> findByDeleted(Boolean deleted) {
+		List<Organizacion> organizaciones = organizacionDao.findByDeleted(deleted);
+		return organizaciones;
+		
+	}
+
 	
 	
 }

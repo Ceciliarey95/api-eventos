@@ -32,16 +32,16 @@ public class OrganizacionController {
 	@Autowired
 	private IOrganizacionService organizacionService;
 	
-	@GetMapping("/todasOrg")
-	public ResponseEntity<Map<String, Object>> getAll(){
+	@GetMapping("/todasOrg/{deleted}")
+	public ResponseEntity<Map<String, Object>> findByDeleted(@PathVariable(name = "deleted") Boolean deleted){
 		Map<String, Object> response = new HashMap<>();
-		List<Organizacion> organizaciones = organizacionService.getAll();
+		List<Organizacion> organizaciones = organizacionService.findByDeleted(deleted);
 		response.put("organizaciones", organizaciones);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
 	}
 	
-	@GetMapping("/org/{cuit}")
+	@GetMapping("/org2/{cuit}")
 	public ResponseEntity<Map<String, Object>> findByCuit(@PathVariable(name = "cuit") Long cuit){
 		Map<String, Object> response = new HashMap<>();
 		Organizacion newOrg = organizacionService.findByCuit(cuit);
@@ -53,21 +53,16 @@ public class OrganizacionController {
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/org/{nombre}")
-	public ResponseEntity<Map<String, Object>> findByNombre(@PathVariable(name = "nombre") String nombre){
+	@GetMapping("/org/{name}")
+	public ResponseEntity<Map<String, Object>> findByNombre(@PathVariable(name = "name") String name){
 		Map<String, Object> response = new HashMap<>();
-		if(organizacionService.findByNombre(nombre)!=null) {
-		response.put("mensaje", "La organizacion con nombre ".concat(nombre).concat(" existe"));
-		}else{
-		response.put("mensaje", "La organizacion con nombre ".concat(nombre).concat(" no existe"));
-		};
+		Organizacion org = organizacionService.findByName(name);
+		response.put("Organización: ",org );
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
 	@PostMapping("/registro")
 	public ResponseEntity<Map<String, Object>> newOrganizacion( @RequestBody @Valid OrganizacionDto orgDto) throws Exception{
-		
-		log.info("Organizacion: "+orgDto.toString());
 		Map<String, Object> response = new HashMap<>();
 		OrganizacionDto newOrganizacion = organizacionService.save(orgDto);
 		response.put("Organizacion: ", newOrganizacion);

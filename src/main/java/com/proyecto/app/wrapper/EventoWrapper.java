@@ -12,9 +12,8 @@ public class EventoWrapper {
 		entity.setName(dto.getName());
 		entity.setDireccion(dto.getDireccion());
 		entity.setEventoUnico(dto.getEventoUnico());
-		if (dto.getEventoUnico()) {
-			entity.setFechaEvento(dto.getFechaEvento());
-		}
+		entity.setActivo(Boolean.TRUE);
+		entity.setFechaEvento(dto.getFechaEvento());
 		
 		return entity;
 	}
@@ -26,9 +25,7 @@ public class EventoWrapper {
 		dto.setName(entity.getName());
 		dto.setDireccion(entity.getDireccion());
 		dto.setEventoUnico(entity.getEventoUnico());
-		if (entity.getEventoUnico()) {
-			dto.setFechaEvento(entity.getFechaEvento());
-		}
+		dto.setFechaEvento(entity.getFechaEvento());
 				
 		return dto;
 	}

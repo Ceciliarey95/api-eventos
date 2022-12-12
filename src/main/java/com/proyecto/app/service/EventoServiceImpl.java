@@ -13,7 +13,7 @@ import com.proyecto.app.wrapper.EventoWrapper;
 @Service
 public class EventoServiceImpl implements IEventoService {
 
-	private static final Logger log = LoggerFactory.getLogger(OrganizacionServiceImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(EventoServiceImpl.class);
 
 	public static Logger getLog() {
 		return log;
@@ -55,9 +55,6 @@ public class EventoServiceImpl implements IEventoService {
 			entityToPersist.setFechaAlta(eventoExist.getFechaAlta());
 			entityToPersist.setEventoUnico(eventoExist.getEventoUnico());
 			entityToPersist.setFechaEvento(eventoExist.getFechaEvento());
-			entityToPersist.setOrganizacion(eventoExist.getOrganizacion());
-			entityToPersist.setTurnos(eventoExist.getTurnos());
-			
 			eventoExist = eventoDao.save(entityToPersist);
 			eventoDto = EventoWrapper.entityToDto(eventoExist);
 			return eventoDto;
@@ -76,10 +73,7 @@ public class EventoServiceImpl implements IEventoService {
 			entityToPersist.setActivo(Boolean.FALSE);
 			entityToPersist.setFechaAlta(eventoExist.getFechaAlta());
 			entityToPersist.setEventoUnico(eventoExist.getEventoUnico());
-			entityToPersist.setFechaEvento(eventoExist.getFechaEvento());
-			entityToPersist.setOrganizacion(eventoExist.getOrganizacion());
-			entityToPersist.setTurnos(eventoExist.getTurnos());
-			
+			entityToPersist.setFechaEvento(eventoExist.getFechaEvento());			
 			eventoExist = eventoDao.save(entityToPersist);
 			eventoDto = EventoWrapper.entityToDto(eventoExist);
 			return eventoDto;

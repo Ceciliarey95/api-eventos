@@ -7,12 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import com.proyecto.app.entity.Usuario;
 
-
 @Repository
 public interface IUsuarioDao extends JpaRepository<Usuario, Long>{
 
-	public Usuario findByDni(Integer dni);
+	public Usuario findByDni(Long dni);
 	
 	public List<Usuario> findByLastname(String lastname);
+
+	public Usuario findByClave(String clave);
 
 }

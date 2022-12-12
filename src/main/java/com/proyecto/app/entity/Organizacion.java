@@ -2,16 +2,11 @@ package com.proyecto.app.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,7 +35,7 @@ public class Organizacion implements Serializable{
 	@Column(nullable=false, unique = true)
 	private Long id;
 	@Column(length =30,unique=true)
-	private String nombre;
+	private String name;
 	@Column(unique=true)
 	private Long cuit;
 	@Email
@@ -53,10 +48,7 @@ public class Organizacion implements Serializable{
 	@Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date fechaAlta;
-	@OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Evento> eventos;
 
-	
 	
 	@PrePersist
     public void prePersist() {
