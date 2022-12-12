@@ -12,7 +12,9 @@ public class OrganizacionWrapper {
 		entity.setClave(dto.getClave());
 		entity.setCuit(dto.getCuit());
 		entity.setNombre(dto.getNombre());
-		
+		entity.setEmail(dto.getEmail());
+		entity.setDireccion(dto.getDireccion());
+		entity.setDeleted(Boolean.FALSE);
 		
 		return entity;
 	}
@@ -24,6 +26,8 @@ public class OrganizacionWrapper {
 		dto.setClave(entity.getClave());
 		dto.setCuit(entity.getCuit());
 		dto.setNombre(entity.getNombre());
+		dto.setEmail(entity.getEmail());
+		dto.setDireccion(entity.getDireccion());	
 		
 		return dto;
 	}

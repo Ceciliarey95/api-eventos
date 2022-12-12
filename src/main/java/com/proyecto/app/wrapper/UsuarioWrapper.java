@@ -13,6 +13,7 @@ public class UsuarioWrapper {
 		entity.setDni(dto.getDni());
 		entity.setLastname(dto.getLastname());
 		entity.setName(dto.getName());
+		entity.setDeleted(Boolean.FALSE);
 		
 		
 		return entity;

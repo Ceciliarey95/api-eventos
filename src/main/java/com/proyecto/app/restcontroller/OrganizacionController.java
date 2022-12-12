@@ -1,6 +1,5 @@
 package com.proyecto.app.restcontroller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +9,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,11 +19,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.proyecto.app.dto.OrganizacionDto;
 import com.proyecto.app.entity.Organizacion;
 import com.proyecto.app.service.IOrganizacionService;
-
+import com.proyecto.app.wrapper.OrganizacionWrapper;
 
 @RequestMapping("api/organizaciones")
 @RestController
@@ -36,34 +33,35 @@ public class OrganizacionController {
 	private IOrganizacionService organizacionService;
 	
 	@GetMapping("/todasOrg")
-	public ResponseEntity<Map<String, Object>> all(){
+	public ResponseEntity<Map<String, Object>> getAll(){
 		Map<String, Object> response = new HashMap<>();
-		List<Organizacion> organizaciones = new ArrayList<>();
+		List<Organizacion> organizaciones = organizacionService.getAll();
 		response.put("organizaciones", organizaciones);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
 	}
 	
 	@GetMapping("/org/{cuit}")
-	public ResponseEntity<HashMap<String, Object>> buscarPorCuit(@PathVariable(name = "name") String cuit) throws NotFoundException{
-		HashMap<String, Object> response = new HashMap<String, Object>();
-
-		if(cuit.equals("23391901244")) {
-			throw new NotFoundException();
+	public ResponseEntity<Map<String, Object>> findByCuit(@PathVariable(name = "cuit") Long cuit){
+		Map<String, Object> response = new HashMap<>();
+		Organizacion newOrg = organizacionService.findByCuit(cuit);
+		if (newOrg != null) {
+		response.put("Organizacion: ", newOrg);
+		}else{
+		response.put("mensaje", "La organizacion con Cuit: "+ cuit +" no existe");
 		}
-		response.put("mensaje", "La organizacion con Cuit: ".concat(cuit).concat(" existe"));
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/org/{nombre}")
-	public ResponseEntity<HashMap<String, Object>> buscarPorNombre(@PathVariable(name = "nombre") String nombre) throws NotFoundException{
-		HashMap<String, Object> response = new HashMap<String, Object>();
-
-		if(nombre.equals("Info")) {
-			throw new NotFoundException();
-		}
+	public ResponseEntity<Map<String, Object>> findByNombre(@PathVariable(name = "nombre") String nombre){
+		Map<String, Object> response = new HashMap<>();
+		if(organizacionService.findByNombre(nombre)!=null) {
 		response.put("mensaje", "La organizacion con nombre ".concat(nombre).concat(" existe"));
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		}else{
+		response.put("mensaje", "La organizacion con nombre ".concat(nombre).concat(" no existe"));
+		};
+		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
 	@PostMapping("/registro")
@@ -76,11 +74,11 @@ public class OrganizacionController {
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateOrg{id}")
+	@PutMapping("/updateOrg/{cuit}")
 	public ResponseEntity<Map<String, Object>> update(@RequestBody OrganizacionDto orgDto){
 		log.info("Organizacion: "+orgDto.toString());
 		Map<String, Object> response = new HashMap<>();
-		OrganizacionDto updateOrg = organizacionService.save(orgDto);
+		OrganizacionDto updateOrg = organizacionService.update(orgDto);
 		
 		if(updateOrg == null) {
 			response.put("mensaje", "No se pudo actualizar la informacion de la organizacion.");
@@ -91,14 +89,16 @@ public class OrganizacionController {
 	}
 	
 	@DeleteMapping("/delete/{cuit}")
-	  public ResponseEntity<Map<String, Object>> delete(@PathVariable OrganizacionDto orgDto) {
+	  public ResponseEntity<Map<String, Object>> deleteOrg(@PathVariable(value="cuit") long cuit) {
 		Map<String, Object> response = new HashMap<>();
+		Organizacion org = organizacionService.findByCuit(cuit);
+		OrganizacionDto orgDto = OrganizacionWrapper.entityToDto(org);
 		OrganizacionDto updateOrg = organizacionService.delete(orgDto);
 		if(updateOrg == null) {
-			response.put("mensaje", "No se pudo borrar la informacion de la organizacion.");
+			response.put("mensaje", "No se pudo borrar la informacion de la organizacion porque no existe.");
 		}
 		
-		response.put("Organizacion: ", updateOrg);
+		response.put("Organizacion eliminada: ", updateOrg);
 		
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	  }

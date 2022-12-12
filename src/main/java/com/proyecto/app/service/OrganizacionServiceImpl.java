@@ -25,7 +25,7 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 	@Override
 	public List<Organizacion> getAll() {
 		// TODO Auto-generated method stub
-		return organizacionDao.findAll();
+		return (List<Organizacion>) organizacionDao.findAll();
 	}
 
 	@Override
@@ -33,15 +33,9 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 		Organizacion organizacion = organizacionDao.findByNombre(nombre);
 		return organizacion;
 	}
-
+	
 	@Override
-	public Organizacion findByCuit(Integer cuit) {
-		Organizacion organizacion = organizacionDao.findByCuit(cuit);
-		return organizacion;
-	}
-
-	@Override
-	public OrganizacionDto save(OrganizacionDto organizacionDto ) {
+	public OrganizacionDto save(OrganizacionDto organizacionDto) {
 		Organizacion organizacion = OrganizacionWrapper.dtoToEntity(organizacionDto);
 		organizacion = organizacionDao.save(organizacion);
 		organizacionDto = OrganizacionWrapper.entityToDto(organizacion);
@@ -57,6 +51,11 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 			entityToPersist.setId(orgExist.getId());
 			entityToPersist.setCuit(organizacionDto.getCuit());
 			entityToPersist.setNombre(organizacionDto.getNombre());
+			entityToPersist.setClave(organizacionDto.getClave());
+			entityToPersist.setEmail(organizacionDto.getEmail());
+			entityToPersist.setDireccion(organizacionDto.getDireccion());
+			entityToPersist.setDeleted(orgExist.getDeleted());
+			entityToPersist.setFechaAlta(orgExist.getFechaAlta());
 			
 			orgExist = organizacionDao.save(entityToPersist);
 			organizacionDto = OrganizacionWrapper.entityToDto(orgExist);
@@ -67,14 +66,21 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 
 	@Override
 	public OrganizacionDto delete(OrganizacionDto organizacionDto) {
-		Organizacion organizacionExist = organizacionDao.findByCuit(organizacionDto.getCuit());
-		if(organizacionExist != null) {
+		Organizacion orgExist = organizacionDao.findByCuit(organizacionDto.getCuit());
+		if(orgExist != null) {
 			Organizacion entityToPersist = new Organizacion();
 			
-			entityToPersist.setDeleted(true);
+			entityToPersist.setId(orgExist.getId());
+			entityToPersist.setCuit(orgExist.getCuit());
+			entityToPersist.setNombre(orgExist.getNombre());
+			entityToPersist.setClave(orgExist.getClave());
+			entityToPersist.setEmail(orgExist.getEmail());
+			entityToPersist.setDireccion(orgExist.getDireccion());
+			entityToPersist.setDeleted(Boolean.TRUE);
+			entityToPersist.setFechaAlta(orgExist.getFechaAlta());
 			
-			organizacionExist = organizacionDao.save(entityToPersist);
-			organizacionDto = OrganizacionWrapper.entityToDto(organizacionExist);
+			orgExist = organizacionDao.save(entityToPersist);
+			organizacionDto = OrganizacionWrapper.entityToDto(orgExist);
 			return organizacionDto;
 		}
 		return null;
@@ -82,6 +88,13 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 
 	public static Logger getLog() {
 		return log;
+	}
+
+	@Override
+	public Organizacion findByCuit(Long cuit) {
+		Organizacion orgExist = organizacionDao.findByCuit(cuit);
+		
+		return orgExist;
 	}
 	
 	

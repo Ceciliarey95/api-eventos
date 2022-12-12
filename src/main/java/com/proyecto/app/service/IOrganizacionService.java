@@ -1,5 +1,6 @@
 package com.proyecto.app.service;
 
+
 import java.util.List;
 
 import com.proyecto.app.dto.OrganizacionDto;
@@ -12,11 +13,12 @@ public interface IOrganizacionService {
 	
 	public Organizacion findByNombre(String nombre);
 	
-	public Organizacion findByCuit(Integer cuit);
+	public Organizacion findByCuit(Long cuit);
 	
 	public OrganizacionDto save(OrganizacionDto organizacion);
 	
 	public OrganizacionDto update(OrganizacionDto organizacion);
 	
 	public OrganizacionDto delete(OrganizacionDto organizacion);
+
 }
