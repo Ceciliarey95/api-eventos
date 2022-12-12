@@ -42,8 +42,12 @@ public class TurnoController {
 	}
 	
 	@GetMapping("/todosTurnos/{activo}")
-	public ResponseEntity<Map<String, Object>> findByActivo(@PathVariable(name = "activo") Boolean activo){
+	public ResponseEntity<Map<String, Object>> findByActivo(@RequestParam(value="organizacion",required =true) String name,@PathVariable(name = "activo") Boolean activo){
 		Map<String, Object> response = new HashMap<>();
+		
+		
+		
+		
 		List<Turno> turnos = turnoService.findByActivo(activo);
 		response.put("Turnos: ", turnos);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);

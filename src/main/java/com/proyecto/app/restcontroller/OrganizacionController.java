@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.proyecto.app.dto.OrganizacionDto;
 import com.proyecto.app.entity.Organizacion;
@@ -36,7 +37,7 @@ public class OrganizacionController {
 	public ResponseEntity<Map<String, Object>> findByDeleted(@PathVariable(name = "deleted") Boolean deleted){
 		Map<String, Object> response = new HashMap<>();
 		List<Organizacion> organizaciones = organizacionService.findByDeleted(deleted);
-		response.put("organizaciones", organizaciones);
+		response.put("Organizaciones: ", organizaciones);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
 	}
@@ -69,32 +70,36 @@ public class OrganizacionController {
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateOrg/{cuit}")
-	public ResponseEntity<Map<String, Object>> update(@RequestBody OrganizacionDto orgDto){
-		log.info("Organizacion: "+orgDto.toString());
+	@PutMapping("/updateOrg")
+	public ResponseEntity<Map<String, Object>> update(@RequestParam(value="clave",required = true) String clave,@RequestBody OrganizacionDto orgDto){
 		Map<String, Object> response = new HashMap<>();
+		Organizacion org = organizacionService.findByClave(clave);
+		if (org!=null) {
 		OrganizacionDto updateOrg = organizacionService.update(orgDto);
-		
-		if(updateOrg == null) {
+		response.put("Organizacion: ", updateOrg);
+		}else {
 			response.put("mensaje", "No se pudo actualizar la informacion de la organizacion.");
 		}
 		
-		response.put("Organizacion: ", updateOrg);
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/delete/{cuit}")
-	  public ResponseEntity<Map<String, Object>> deleteOrg(@PathVariable(value="cuit") long cuit) {
+	@DeleteMapping("/delete")
+	  public ResponseEntity<Map<String, Object>> deleteOrg(@RequestParam(value="clave",required = true) String clave) {
 		Map<String, Object> response = new HashMap<>();
-		Organizacion org = organizacionService.findByCuit(cuit);
+		Organizacion org = organizacionService.findByClave(clave);
+		if (org != null) {
 		OrganizacionDto orgDto = OrganizacionWrapper.entityToDto(org);
 		OrganizacionDto updateOrg = organizacionService.delete(orgDto);
-		if(updateOrg == null) {
+		response.put("Organizacion eliminada: ", updateOrg);
+		}else{
 			response.put("mensaje", "No se pudo borrar la informacion de la organizacion porque no existe.");
 		}
 		
-		response.put("Organizacion eliminada: ", updateOrg);
-		
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	  }
+
+	public static Logger getLog() {
+		return log;
+	}
 }
