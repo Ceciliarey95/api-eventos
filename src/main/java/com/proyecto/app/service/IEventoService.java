@@ -2,7 +2,6 @@ package com.proyecto.app.service;
 
 import java.util.List;
 
-import com.proyecto.app.dto.EventoUnicoDto;
 import com.proyecto.app.entity.Evento;
 
 public interface IEventoService {
@@ -11,10 +10,14 @@ public interface IEventoService {
 	
 	public Evento findByName(String name);
 	
-	public EventoUnicoDto save(EventoUnicoDto evento);
+	public Evento save(Evento evento);
 	
-	public EventoUnicoDto update(EventoUnicoDto evento);
+	public Evento update(Evento evento);
 	
-	public EventoUnicoDto delete(EventoUnicoDto evento);
+	public Evento delete(Evento evento);
+	
+	public List<Evento> findByOrganizacion(Long id);
+
+	public void saveAll(List<Evento> eventos);
 
 }

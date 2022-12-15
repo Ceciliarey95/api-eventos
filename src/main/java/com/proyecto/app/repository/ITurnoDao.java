@@ -9,4 +9,6 @@ public interface ITurnoDao extends JpaRepository<Turno, Long>  {
 
 	public List<Turno> findByActivo(Boolean activo);
 
+	public Turno findByEvento(Long evento_id);
+
 }

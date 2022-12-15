@@ -7,11 +7,18 @@ import com.proyecto.app.entity.Turno;
 
 public interface ITurnoService {
 
-	public List<Turno> findByActivo(Boolean activo);
-
 	public TurnoEventoRecurrDto saveTurnoEvRe(TurnoEventoRecurrDto turnoEventoRecurrDto);
+	
+	public TurnoEventoRecurrDto saveEventoAndUsuarioTR(String name, String clave);
 	
 	public TurnoEventoUnicoDto saveEventoAndUsuarioTU(String name, String clave);
 
 	public TurnoEventoUnicoDto saveTurnoEvU(TurnoEventoUnicoDto turnoEventoUnicoDto);
+
+	public List<Turno> findByActivoAndOrganizacion(Boolean activo, String name);
+
+	public List<Turno> findAll();
+
+	public void saveAll(List<Turno> turnos);
+
 }

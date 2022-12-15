@@ -1,8 +1,6 @@
 package com.proyecto.app.dto;
 
-import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.Size;
-
 import org.hibernate.validator.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +22,5 @@ public class EventoRecurrDto {
 	private String name;
 	@NotBlank(message = "El campo direccion no puede estar vacio")
 	private String direccion;
-	@AssertFalse
-	private Boolean eventoUnico;
 
 }

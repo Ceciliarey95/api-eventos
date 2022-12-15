@@ -8,20 +8,20 @@ import org.springframework.stereotype.Service;
 import com.proyecto.app.dto.EventoUnicoDto;
 import com.proyecto.app.entity.Evento;
 import com.proyecto.app.repository.IEventoDao;
-import com.proyecto.app.wrapper.EventoUnicoWrapper;
+import com.proyecto.app.wrapper.EventoWrapper;
 
 @Service
 public class EventoServiceImpl implements IEventoService {
 
 	private static final Logger log = LoggerFactory.getLogger(EventoServiceImpl.class);
 
+	@Autowired
+	private IEventoDao eventoDao;
+	
 	public static Logger getLog() {
 		return log;
 	}
 
-
-	@Autowired
-	private IEventoDao eventoDao;
 	
 	@Override
 	public List<Evento> getAll() {
@@ -35,17 +35,16 @@ public class EventoServiceImpl implements IEventoService {
 	}
 
 	@Override
-	public EventoUnicoDto save(EventoUnicoDto eventoUnicoDto) {
-		Evento evento = EventoUnicoWrapper.dtoToEntity(eventoUnicoDto);
+	public Evento save(Evento evento) {
 		evento = eventoDao.save(evento);
-		eventoUnicoDto = EventoUnicoWrapper.entityToDto(evento);
-		return eventoUnicoDto;
+		return evento;
 	}
 
 	@Override
-	public EventoUnicoDto update(EventoUnicoDto eventoUnicoDto) {
-		Evento eventoExist = eventoDao.findByName(eventoUnicoDto.getName());
+	public Evento update(Evento evento) {
+		Evento eventoExist = eventoDao.findByName(evento.getName());
 		if(eventoExist  != null) {
+			EventoUnicoDto eventoUnicoDto = EventoWrapper.entityToDtoU(eventoExist);
 			Evento entityToPersist = new Evento();
 			
 			entityToPersist.setId(eventoExist.getId());
@@ -54,17 +53,16 @@ public class EventoServiceImpl implements IEventoService {
 			entityToPersist.setActivo(eventoExist.getActivo());
 			entityToPersist.setFechaAlta(eventoExist.getFechaAlta());
 			entityToPersist.setEventoUnico(eventoExist.getEventoUnico());
-			entityToPersist.setFechaEvento(eventoExist.getFechaEvento());
+			entityToPersist.setFechaEvento(eventoUnicoDto.getFechaEvento());
 			eventoExist = eventoDao.save(entityToPersist);
-			eventoUnicoDto = EventoUnicoWrapper.entityToDto(eventoExist);
-			return eventoUnicoDto;
+			return eventoExist;
 		}
 		return null;
 	}
 
 	@Override
-	public EventoUnicoDto delete(EventoUnicoDto eventoUnicoDto) {
-		Evento eventoExist = eventoDao.findByName(eventoUnicoDto.getName());
+	public Evento delete(Evento evento) {
+		Evento eventoExist = eventoDao.findByName(evento.getName());
 		if(eventoExist  != null) {
 			Evento entityToPersist = new Evento();
 			entityToPersist.setId(eventoExist.getId());
@@ -75,9 +73,22 @@ public class EventoServiceImpl implements IEventoService {
 			entityToPersist.setEventoUnico(eventoExist.getEventoUnico());
 			entityToPersist.setFechaEvento(eventoExist.getFechaEvento());			
 			eventoExist = eventoDao.save(entityToPersist);
-			eventoUnicoDto = EventoUnicoWrapper.entityToDto(eventoExist);
-			return eventoUnicoDto;
+			return evento;
 		}
 		return null;
+	}
+		
+	@Override
+	public List<Evento> findByOrganizacion(Long id){
+		List<Evento> eventos = eventoDao.findByOrganizacion(id);
+		return eventos;
+	}
+
+
+	@Override
+	public void saveAll(List<Evento> eventos) {
+		for (Evento evento : eventos) {
+			evento= eventoDao.save(evento);
+		}
 	}
 }

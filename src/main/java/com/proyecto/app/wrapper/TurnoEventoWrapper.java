@@ -12,8 +12,7 @@ public class TurnoEventoWrapper {
 		entity.setActivo(Boolean.TRUE);
 		entity.setFechaHora(dto.getFechaHora());
 		entity.setCodigo(entity.getCodigo());
-		entity.setUsuario(null);
-		entity.setEvento(null);
+
 		return entity;
 	}
 	

@@ -61,5 +61,6 @@ public class Turno implements Serializable{
     public static int numeroAleatorioEnRango(int minimo, int maximo) {
         return ThreadLocalRandom.current().nextInt(minimo, maximo + 1);
     }
+
 }
  

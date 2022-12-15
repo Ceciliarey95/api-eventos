@@ -12,9 +12,10 @@ public interface IOrganizacionDao extends JpaRepository<Organizacion, Long> {
 	
 	public Organizacion findByName(String nombre);
 
-	public Organizacion findByCuit(Long cuit);
+	public Organizacion findByCuit(String cuit);
 
 	public Organizacion findByClave(String clave);
 
 	public List<Organizacion> findByDeleted(Boolean deleted);
+
 }

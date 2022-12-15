@@ -43,7 +43,7 @@ public class OrganizacionController {
 	}
 	
 	@GetMapping("/org2/{cuit}")
-	public ResponseEntity<Map<String, Object>> findByCuit(@PathVariable(name = "cuit") Long cuit){
+	public ResponseEntity<Map<String, Object>> findByCuit(@PathVariable(name = "cuit") String cuit){
 		Map<String, Object> response = new HashMap<>();
 		Organizacion newOrg = organizacionService.findByCuit(cuit);
 		if (newOrg != null) {
@@ -71,12 +71,12 @@ public class OrganizacionController {
 	}
 	
 	@PutMapping("/updateOrg")
-	public ResponseEntity<Map<String, Object>> update(@RequestParam(value="clave",required = true) String clave,@RequestBody OrganizacionDto orgDto){
+	public ResponseEntity<Map<String, Object>> update(@RequestBody OrganizacionDto orgDto){
 		Map<String, Object> response = new HashMap<>();
-		Organizacion org = organizacionService.findByClave(clave);
+		Organizacion org = organizacionService.findByClave(orgDto.getClave());
 		if (org!=null) {
-		OrganizacionDto updateOrg = organizacionService.update(orgDto);
-		response.put("Organizacion: ", updateOrg);
+			OrganizacionDto updateOrg = organizacionService.update(orgDto);
+			response.put("Organizacion: ", updateOrg);
 		}else {
 			response.put("mensaje", "No se pudo actualizar la informacion de la organizacion.");
 		}

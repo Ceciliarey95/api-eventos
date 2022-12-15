@@ -91,7 +91,7 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 	}
 
 	@Override
-	public Organizacion findByCuit(Long cuit) {
+	public Organizacion findByCuit(String cuit) {
 		Organizacion orgExist = organizacionDao.findByCuit(cuit);
 		
 		return orgExist;

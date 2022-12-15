@@ -14,9 +14,7 @@ public interface IOrganizacionService {
 	public List<Organizacion> findByDeleted(Boolean deleted);
 	
 	public Organizacion findByName(String name);
-	
-	public Organizacion findByCuit(Long cuit);
-	
+		
 	public OrganizacionDto save(OrganizacionDto organizacion);
 	
 	public OrganizacionDto update(OrganizacionDto organizacion);
@@ -24,5 +22,7 @@ public interface IOrganizacionService {
 	public OrganizacionDto delete(OrganizacionDto organizacion);
 
 	public Organizacion findByClave(String clave);
+
+	public Organizacion findByCuit(String cuit);
 
 }
