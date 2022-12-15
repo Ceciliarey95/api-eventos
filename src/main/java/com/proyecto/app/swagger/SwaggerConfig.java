@@ -34,8 +34,8 @@ public class SwaggerConfig {
 	
 	private ApiInfo getApiInfo() {
 		return new ApiInfo(
-				"Order Service API",
-				"Order Service API Description",
+				"API Turnos - Eventos",
+				"Permite crear eventos únicos o recurrentes desde una organización o sacar turnos como usuario",
 				"1.0",
 				"http://codmind.com/terms",
 				new springfox.documentation.service.Contact("Codmind", "https://codmind.com", "apis@codmind.com"),

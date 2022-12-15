@@ -5,10 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.proyecto.app.dto.EventoDto;
+import com.proyecto.app.dto.EventoUnicoDto;
 import com.proyecto.app.entity.Evento;
 import com.proyecto.app.repository.IEventoDao;
-import com.proyecto.app.wrapper.EventoWrapper;
+import com.proyecto.app.wrapper.EventoUnicoWrapper;
 
 @Service
 public class EventoServiceImpl implements IEventoService {
@@ -35,36 +35,36 @@ public class EventoServiceImpl implements IEventoService {
 	}
 
 	@Override
-	public EventoDto save(EventoDto eventoDto) {
-		Evento evento = EventoWrapper.dtoToEntity(eventoDto);
+	public EventoUnicoDto save(EventoUnicoDto eventoUnicoDto) {
+		Evento evento = EventoUnicoWrapper.dtoToEntity(eventoUnicoDto);
 		evento = eventoDao.save(evento);
-		eventoDto = EventoWrapper.entityToDto(evento);
-		return eventoDto;
+		eventoUnicoDto = EventoUnicoWrapper.entityToDto(evento);
+		return eventoUnicoDto;
 	}
 
 	@Override
-	public EventoDto update(EventoDto eventoDto) {
-		Evento eventoExist = eventoDao.findByName(eventoDto.getName());
+	public EventoUnicoDto update(EventoUnicoDto eventoUnicoDto) {
+		Evento eventoExist = eventoDao.findByName(eventoUnicoDto.getName());
 		if(eventoExist  != null) {
 			Evento entityToPersist = new Evento();
 			
 			entityToPersist.setId(eventoExist.getId());
-			entityToPersist.setDireccion(eventoDto.getDireccion());
-			entityToPersist.setName(eventoDto.getName());
+			entityToPersist.setDireccion(eventoUnicoDto.getDireccion());
+			entityToPersist.setName(eventoUnicoDto.getName());
 			entityToPersist.setActivo(eventoExist.getActivo());
 			entityToPersist.setFechaAlta(eventoExist.getFechaAlta());
 			entityToPersist.setEventoUnico(eventoExist.getEventoUnico());
 			entityToPersist.setFechaEvento(eventoExist.getFechaEvento());
 			eventoExist = eventoDao.save(entityToPersist);
-			eventoDto = EventoWrapper.entityToDto(eventoExist);
-			return eventoDto;
+			eventoUnicoDto = EventoUnicoWrapper.entityToDto(eventoExist);
+			return eventoUnicoDto;
 		}
 		return null;
 	}
 
 	@Override
-	public EventoDto delete(EventoDto eventoDto) {
-		Evento eventoExist = eventoDao.findByName(eventoDto.getName());
+	public EventoUnicoDto delete(EventoUnicoDto eventoUnicoDto) {
+		Evento eventoExist = eventoDao.findByName(eventoUnicoDto.getName());
 		if(eventoExist  != null) {
 			Evento entityToPersist = new Evento();
 			entityToPersist.setId(eventoExist.getId());
@@ -75,8 +75,8 @@ public class EventoServiceImpl implements IEventoService {
 			entityToPersist.setEventoUnico(eventoExist.getEventoUnico());
 			entityToPersist.setFechaEvento(eventoExist.getFechaEvento());			
 			eventoExist = eventoDao.save(entityToPersist);
-			eventoDto = EventoWrapper.entityToDto(eventoExist);
-			return eventoDto;
+			eventoUnicoDto = EventoUnicoWrapper.entityToDto(eventoExist);
+			return eventoUnicoDto;
 		}
 		return null;
 	}

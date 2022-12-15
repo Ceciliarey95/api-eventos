@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.proyecto.app.dto.TurnoDto;
+import com.proyecto.app.dto.TurnoEventoRecurrDto;
+import com.proyecto.app.dto.TurnoEventoUnicoDto;
 import com.proyecto.app.entity.Turno;
 import com.proyecto.app.service.ITurnoService;
 
@@ -32,11 +33,19 @@ public class TurnoController {
 	private ITurnoService turnoService;
 	
 	
-	@PostMapping("/registro/")
+	@PostMapping("/registroEventoUnico/")
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> newTurno(@RequestParam(value="evento",required =true) String name, @RequestParam(value="clave",required = true) String clave, @RequestBody @Valid TurnoDto turnoDto) throws Exception{
+	public ResponseEntity<Map<String, Object>> newTurno(@RequestParam(value="eventoUnico",required =true) String name, @RequestParam(value="clave",required = true) String clave, @RequestBody @Valid TurnoEventoUnicoDto turnoEventoUnicoDto) throws Exception{
 		Map<String, Object> response = new HashMap<>();
-		TurnoDto newTurno = turnoService.saveEventoAndUsuario(name, clave);
+		TurnoEventoUnicoDto newTurno = turnoService.saveEventoAndUsuario(name, clave);
+		response.put("Turno: ", newTurno);
+		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
+	}
+	@PostMapping("/registroEventoRecurr/")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> newTurno(@RequestParam(value="eventoRecurr",required =true) String name, @RequestParam(value="clave",required = true) String clave, @RequestBody @Valid TurnoEventoRecurrDto turnoEventoRecurrDto) throws Exception{
+		Map<String, Object> response = new HashMap<>();
+		TurnoEventoRecurrDto newTurno = turnoService.saveEventoAndUsuario(name, clave);
 		response.put("Turno: ", newTurno);
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}

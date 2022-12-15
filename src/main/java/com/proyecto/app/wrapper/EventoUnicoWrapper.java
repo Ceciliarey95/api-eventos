@@ -1,11 +1,11 @@
 package com.proyecto.app.wrapper;
 
-import com.proyecto.app.dto.EventoDto;
+import com.proyecto.app.dto.EventoUnicoDto;
 import com.proyecto.app.entity.Evento;
 
-public class EventoWrapper {
+public class EventoUnicoWrapper {
 	
-	public static Evento dtoToEntity(EventoDto dto) {
+	public static Evento dtoToEntity(EventoUnicoDto dto) {
 		if(dto == null) return new Evento();
 		
 		Evento entity = new Evento();
@@ -18,10 +18,10 @@ public class EventoWrapper {
 		return entity;
 	}
 	
-	public static EventoDto entityToDto(Evento entity) {
-		if(entity == null) return new EventoDto();
+	public static EventoUnicoDto entityToDto(Evento entity) {
+		if(entity == null) return new EventoUnicoDto();
 		
-		EventoDto dto = new EventoDto();
+		EventoUnicoDto dto = new EventoUnicoDto();
 		dto.setName(entity.getName());
 		dto.setDireccion(entity.getDireccion());
 		dto.setEventoUnico(entity.getEventoUnico());

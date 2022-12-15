@@ -1,6 +1,5 @@
 package com.proyecto.app.restcontroller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,6 @@ import javax.validation.Valid;
 import com.proyecto.app.dto.UsuarioDto;
 import com.proyecto.app.entity.Usuario;
 import com.proyecto.app.service.IUsuarioService;
-import com.proyecto.app.wrapper.OrganizacionWrapper;
 import com.proyecto.app.wrapper.UsuarioWrapper;
 
 @RequestMapping("api/usuarios")

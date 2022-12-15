@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.proyecto.app.dto.EventoDto;
+import com.proyecto.app.dto.EventoUnicoDto;
 import com.proyecto.app.entity.Evento;
 import com.proyecto.app.service.IEventoService;
-import com.proyecto.app.wrapper.EventoWrapper;
+import com.proyecto.app.wrapper.EventoUnicoWrapper;
 
 @RequestMapping("api/eventos")
 @RestController
@@ -40,17 +40,17 @@ public class EventoController {
 	}
 
 	@PostMapping("/registro")
-	public ResponseEntity<Map<String, Object>> newEvento( @RequestBody @Valid EventoDto eventoDto) {
+	public ResponseEntity<Map<String, Object>> newEvento( @RequestBody @Valid EventoUnicoDto eventoUnicoDto) {
 		Map<String, Object> response = new HashMap<>();
-		EventoDto newEvento = eventoService.save(eventoDto);
+		EventoUnicoDto newEvento = eventoService.save(eventoUnicoDto);
 		response.put("Evento: ", newEvento);
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
 	@PutMapping("/updateEvento/{nombre}")
-	public ResponseEntity<Map<String, Object>> update(@RequestBody EventoDto eventoDto){
+	public ResponseEntity<Map<String, Object>> update(@RequestBody EventoUnicoDto eventoUnicoDto){
 		Map<String, Object> response = new HashMap<>();
-		EventoDto updateEvento = eventoService.update(eventoDto);
+		EventoUnicoDto updateEvento = eventoService.update(eventoUnicoDto);
 		if(updateEvento == null) {
 			response.put("mensaje", "No se pudo actualizar la informacion del evento.");
 		}
@@ -64,8 +64,8 @@ public class EventoController {
 		Map<String, Object> response = new HashMap<>();
 		Evento evento = eventoService.findByName(name);
 		System.out.println(evento);
-		EventoDto eventoDto = EventoWrapper.entityToDto(evento);
-		EventoDto updateEvento = eventoService.delete(eventoDto);
+		EventoUnicoDto eventoUnicoDto = EventoUnicoWrapper.entityToDto(evento);
+		EventoUnicoDto updateEvento = eventoService.delete(eventoUnicoDto);
 		if(updateEvento == null) {
 			response.put("mensaje", "No se pudo borrar la informacion del evento porque no existe.");
 		}else {

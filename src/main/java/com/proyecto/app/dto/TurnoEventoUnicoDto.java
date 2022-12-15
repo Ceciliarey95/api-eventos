@@ -1,10 +1,7 @@
 package com.proyecto.app.dto;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotEmpty;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.proyecto.app.entity.Evento;
 import com.proyecto.app.entity.Usuario;
 
 import lombok.AllArgsConstructor;
@@ -18,11 +15,9 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString
 @AllArgsConstructor
-public class TurnoDto {
-
-	@DateTimeFormat(pattern="dd-MM-yyyy")
-	private LocalDateTime fechaHora;
-	private Evento evento;
+public class TurnoEventoUnicoDto {
+	
+	@NotEmpty(message="El usuario no puede estar vacio")
 	private Usuario usuario;
 	
 }

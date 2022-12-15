@@ -1,9 +1,9 @@
 package com.proyecto.app.dto;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.format.annotation.DateTimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +16,15 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString
 @AllArgsConstructor
-public class EventoDto {
+public class EventoRecurrDto {
+
 	
 	@NotBlank(message = "El campo nombre no puede estar vacio")
 	@Size( max= 20, message = "El nombre no debe ser mayor a 20.")
 	private String name;
+	@NotBlank(message = "El campo direccion no puede estar vacio")
 	private String direccion;
+	@AssertFalse
 	private Boolean eventoUnico;
-    @DateTimeFormat(pattern="dd-MM-yyyy")
-	private LocalDateTime fechaEvento;
+
 }

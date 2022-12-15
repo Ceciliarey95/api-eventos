@@ -6,12 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.proyecto.app.dto.TurnoDto;
+import com.proyecto.app.dto.TurnoEventoRecurrDto;
+import com.proyecto.app.dto.TurnoEventoUnicoDto;
 import com.proyecto.app.entity.Evento;
 import com.proyecto.app.entity.Turno;
 import com.proyecto.app.entity.Usuario;
 import com.proyecto.app.repository.ITurnoDao;
-import com.proyecto.app.wrapper.TurnoWrapper;
+import com.proyecto.app.wrapper.TurnoEventoWrapper;
 
 @Service
 public class TurnoServiceImpl implements ITurnoService {
@@ -33,31 +34,39 @@ public class TurnoServiceImpl implements ITurnoService {
 	}
 
 	@Override
-	public TurnoDto save(TurnoDto turnoDto) {
-		Turno turno = TurnoWrapper.dtoToEntity(turnoDto);
+	public TurnoEventoRecurrDto saveTurnoEvRe(TurnoEventoRecurrDto turnoEventoRecurrDto) {
+		Turno turno = TurnoEventoWrapper.dtoToEntityR(turnoEventoRecurrDto);
 		turno = turnoDao.save(turno);
-		turnoDto = TurnoWrapper.entityToDto(turno);
-		return turnoDto;
+		turnoEventoRecurrDto = TurnoEventoWrapper.entityToDtoR(turno);
+		return turnoEventoRecurrDto;
+	}
+	@Override
+	public TurnoEventoUnicoDto saveTurnoEvU(TurnoEventoUnicoDto turnoEventoUnicoDto) {
+		Turno turno = TurnoEventoWrapper.dtoToEntityU(turnoEventoUnicoDto);
+		turno = turnoDao.save(turno);
+		turnoEventoUnicoDto = TurnoEventoWrapper.entityToDtoU(turno);
+		return turnoEventoUnicoDto;
 	}
 	
-	public TurnoDto saveEventoAndUsuario(String name, String clave) {
-		TurnoDto turnoDto= new TurnoDto();
+	public TurnoEventoUnicoDto saveEventoAndUsuarioTU(String name, String clave) {
+		TurnoEventoUnicoDto turnoEventoUnicoDto= new TurnoEventoUnicoDto();
 		Usuario usuario = usuarioService.findByClave(clave);
 		Evento evento = eventoService.findByName(name);
 
 		if(evento != null) {
-			turnoDto.setEvento(evento);
+			Turno turnoEventoUnico = TurnoEventoWrapper.dtoToEntityU(turnoEventoUnicoDto);
+			turnoEventoUnico.setEvento(evento);
 			if(evento.getEventoUnico()) {
-				turnoDto.setFechaHora(evento.getFechaEvento());
+				turnoEventoUnico.setFechaHora(evento.getFechaEvento());
 		}
 		
 		}
 		if(usuario != null) {
-			turnoDto.setUsuario(usuario);
+			turnoEventoUnicoDto.setUsuario(usuario);
 		}
-		Turno turno = TurnoWrapper.dtoToEntity(turnoDto);
+		Turno turno = TurnoEventoWrapper.dtoToEntityU(turnoEventoUnicoDto);
 		turno = turnoDao.save(turno);
-		return turnoDto;
+		return turnoEventoUnicoDto;
 	}
 	
 	public static Logger getLog() {
