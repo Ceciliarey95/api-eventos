@@ -53,7 +53,7 @@ public class Organizacion implements Serializable{
 	@Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date fechaAlta;
-	@OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "organizacion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Evento> eventos;
 
 	

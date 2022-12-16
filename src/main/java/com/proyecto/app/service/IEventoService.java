@@ -3,6 +3,7 @@ package com.proyecto.app.service;
 import java.util.List;
 
 import com.proyecto.app.entity.Evento;
+import com.proyecto.app.entity.Organizacion;
 
 public interface IEventoService {
 
@@ -16,8 +17,9 @@ public interface IEventoService {
 	
 	public Evento delete(Evento evento);
 	
-	public List<Evento> findByOrganizacion(Long id);
+	public List<Evento> findByOrganizacion(Organizacion org);
 
 	public void saveAll(List<Evento> eventos);
+
 
 }

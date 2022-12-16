@@ -17,12 +17,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
-@ToString
 @AllArgsConstructor
 @Entity(name="turnos")
 public class Turno implements Serializable{
@@ -32,7 +30,7 @@ public class Turno implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable=false, unique = true)
 	private Long id;
-	@Column(name="fecha_hora",unique=true,nullable = false)
+	@Column(name="fecha_hora",nullable = false)
 	@DateTimeFormat(pattern="dd-MM-yyyy")
 	private LocalDateTime fechaHora;
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -61,6 +59,11 @@ public class Turno implements Serializable{
     public static int numeroAleatorioEnRango(int minimo, int maximo) {
         return ThreadLocalRandom.current().nextInt(minimo, maximo + 1);
     }
+	@Override
+	public String toString() {
+		return "Turno [id=" + id + ", fechaHora=" + fechaHora + ", activo=" + activo + ", codigo=" + codigo + "]";
+	}
 
+    
 }
  

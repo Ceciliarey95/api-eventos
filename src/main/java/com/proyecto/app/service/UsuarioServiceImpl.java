@@ -59,7 +59,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
 	@Override
 	public UsuarioDto update(UsuarioDto usuarioDto) {
-		Usuario usuarioExist = usuarioDao.findByDni(usuarioDto.getDni());
+		Usuario usuarioExist = usuarioDao.findByClave(usuarioDto.getClave());
 		if(usuarioExist != null) {
 			Usuario entityToPersist = new Usuario();
 			
@@ -67,6 +67,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 			entityToPersist.setDni(usuarioDto.getDni());
 			entityToPersist.setLastname(usuarioDto.getLastname());
 			entityToPersist.setName(usuarioDto.getName());
+			entityToPersist.setClave(usuarioDto.getClave());
 			
 			usuarioExist = usuarioDao.save(entityToPersist);
 			usuarioDto = UsuarioWrapper.entityToDto(usuarioExist);
@@ -77,11 +78,15 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	
 	@Override
 	public UsuarioDto delete(UsuarioDto usuarioDto) {
-		Usuario usuarioExist = usuarioDao.findByDni(usuarioDto.getDni());
+		Usuario usuarioExist = usuarioDao.findByClave(usuarioDto.getClave());
 		if(usuarioExist != null) {
 			Usuario entityToPersist = new Usuario();
-			
 			entityToPersist.setDeleted(true);
+			entityToPersist.setId(usuarioExist.getId());
+			entityToPersist.setDni(usuarioDto.getDni());
+			entityToPersist.setLastname(usuarioDto.getLastname());
+			entityToPersist.setName(usuarioDto.getName());
+			entityToPersist.setClave(usuarioDto.getClave());
 			
 			usuarioExist = usuarioDao.save(entityToPersist);
 			usuarioDto = UsuarioWrapper.entityToDto(usuarioExist);

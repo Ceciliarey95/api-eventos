@@ -19,8 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.proyecto.app.dto.TurnoEventoRecurrDto;
 import com.proyecto.app.dto.TurnoEventoUnicoDto;
+import com.proyecto.app.entity.Evento;
 import com.proyecto.app.entity.Turno;
+import com.proyecto.app.entity.Usuario;
+import com.proyecto.app.service.IEventoService;
 import com.proyecto.app.service.ITurnoService;
+import com.proyecto.app.service.IUsuarioService;
+import com.proyecto.app.wrapper.TurnoEventoWrapper;
 
 @RequestMapping("api/turnos")
 @RestController
@@ -30,28 +35,48 @@ public class TurnoController {
 
 	@Autowired
 	private ITurnoService turnoService;
+	@Autowired
+	private IUsuarioService usuarioService;
+	@Autowired
+	private IEventoService eventoService;
 	
 	
 	@PostMapping("/registroTurnoEventoUnico/")
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> newTurno(@RequestBody @Valid TurnoEventoUnicoDto turnoEventoUnicoDto,@RequestBody String clave,@RequestBody String name) throws Exception{
+	public ResponseEntity<Map<String, Object>> newTurno(@RequestBody @Valid TurnoEventoUnicoDto turnoEventoUnicoDto) throws Exception{
 		Map<String, Object> response = new HashMap<>();
-		TurnoEventoUnicoDto newTurno = turnoService.saveEventoAndUsuarioTU(name, clave);
-		newTurno = turnoService.saveTurnoEvU(turnoEventoUnicoDto);
-		response.put("Turno: ", newTurno);
+		Usuario usuario = usuarioService.findByClave(turnoEventoUnicoDto.getClave());
+		Evento evento = eventoService.findByName(turnoEventoUnicoDto.getNameEvento());
+		if(evento!= null && usuario != null) {
+			Turno turno = TurnoEventoWrapper.dtoToEntityU(turnoEventoUnicoDto);
+			turno.setEvento(evento);
+			turno.setUsuario(usuario);
+			turno.setFechaHora(evento.getFechaEvento());
+			turno = turnoService.save(turno);
+			response.put("Mensaje", "El turno se guardó con exito!");
+		}else {
+				response.put("Mensaje:", "El turno no se pudo guardar!");}
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	@PostMapping("/registroTurnoEventoRecurr/")
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> newTurno(@RequestBody @Valid TurnoEventoRecurrDto turnoEventoRecurrDto,@RequestBody String nombreEventoRecurr,@RequestBody String claveUsuario) throws Exception{
+	public ResponseEntity<Map<String, Object>> newTurno(@RequestBody @Valid TurnoEventoRecurrDto turnoEventoRecurrDto) throws Exception{
 		Map<String, Object> response = new HashMap<>();
-		TurnoEventoRecurrDto newTurno = turnoService.saveEventoAndUsuarioTR(nombreEventoRecurr, claveUsuario);
-		response.put("Turno: ", newTurno);
+		Usuario usuario = usuarioService.findByClave(turnoEventoRecurrDto.getClave());
+		Evento evento = eventoService.findByName(turnoEventoRecurrDto.getNameEvento());
+		if(evento!= null && usuario != null) {
+			Turno turno = TurnoEventoWrapper.dtoToEntityR(turnoEventoRecurrDto);
+			turno.setEvento(evento);
+			turno.setUsuario(usuario);
+			turno = turnoService.save(turno);
+			response.put("Mensaje", "El turno se guardó con exito!");
+		}else {
+				response.put("Mensaje:", "El turno no se pudo guardar!");}
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/todosTurnosActivosOrg/")
-	public ResponseEntity<Map<String, Object>> findByActivoAndOrganizacion(@RequestParam(value="organizacion",required =true) String name){
+	public ResponseEntity<Map<String, Object>> findByActivoAndOrganizacion(@RequestBody String name){
 		Map<String, Object> response = new HashMap<>();
 		List<Turno> turnos = turnoService.findByActivoAndOrganizacion(true, name);
 		response.put("Turnos: ", turnos);

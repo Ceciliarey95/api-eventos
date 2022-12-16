@@ -31,6 +31,6 @@ public class Usuario implements Serializable{
 	@Column(unique=true)
 	private String clave;
 	private Boolean deleted;
-	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Turno> turnos;
 }

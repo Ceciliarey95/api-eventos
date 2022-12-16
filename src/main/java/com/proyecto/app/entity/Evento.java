@@ -17,21 +17,17 @@ import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
-@ToString
 @AllArgsConstructor
 @Entity(name="eventos")
 public class Evento implements Serializable{
@@ -54,7 +50,7 @@ public class Evento implements Serializable{
 	@Column(unique=true)
 	@DateTimeFormat(pattern="dd-MM-yyyy")
 	private LocalDateTime fechaEvento;
-	@OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Turno> turnos;
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "organizacion_id")
@@ -67,4 +63,13 @@ public class Evento implements Serializable{
     public void prePersist() {
         fechaAlta = new Date();
     }
+
+
+
+	@Override
+	public String toString() {
+		return "Evento [id=" + id + ", name=" + name + ", direccion=" + direccion + ", activo=" + activo
+				+ ", fechaAlta=" + fechaAlta + ", eventoUnico=" + eventoUnico + ", fechaEvento=" + fechaEvento
+				+ "]";
+	}
 }

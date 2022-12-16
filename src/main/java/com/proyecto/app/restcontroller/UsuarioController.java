@@ -78,10 +78,10 @@ public class UsuarioController {
 	}
 	
 	@PutMapping("/updateUser")
-	public ResponseEntity<Map<String, Object>> update(@RequestParam(value="clave",required = true) String clave,@RequestBody UsuarioDto usuarioDto){
+	public ResponseEntity<Map<String, Object>> update(@RequestBody UsuarioDto usuarioDto){
 		log.info("usuario: "+usuarioDto.toString());
 		Map<String, Object> response = new HashMap<>();
-		Usuario usuario = usuarioService.findByClave(clave);
+		Usuario usuario = usuarioService.findByClave(usuarioDto.getClave());
 		if(usuario!=null) {
 		UsuarioDto updateUser = usuarioService.update(usuarioDto);
 		response.put("Usuario: ", updateUser);
@@ -93,13 +93,13 @@ public class UsuarioController {
 	}
 	
 	@DeleteMapping("/delete")
-	  public ResponseEntity<Map<String, Object>> delete(@RequestParam(value="clave",required = true) String clave) {
+	  public ResponseEntity<Map<String, Object>> delete(@RequestBody String clave) {
 		Map<String, Object> response = new HashMap<>();
 		Usuario usuario = usuarioService.findByClave(clave);
 		if(usuario!=null) {
 		UsuarioDto usuarioDto = UsuarioWrapper.entityToDto(usuario);
-		UsuarioDto updateUser = usuarioService.delete(usuarioDto);
-		response.put("Usuario: ", updateUser);
+		usuarioDto = usuarioService.delete(usuarioDto);
+		response.put("Mensaje: ", "El usuario ha sido eliminado!");
 		}else {
 			response.put("mensaje", "No se pudo borrar la informacion del usuario.");
 		}

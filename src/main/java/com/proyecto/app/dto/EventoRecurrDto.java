@@ -22,5 +22,6 @@ public class EventoRecurrDto {
 	private String name;
 	@NotBlank(message = "El campo direccion no puede estar vacio")
 	private String direccion;
+	private String clave;
 
 }

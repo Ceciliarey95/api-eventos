@@ -20,5 +20,7 @@ public class TurnoEventoRecurrDto {
 	@Future
 	@DateTimeFormat(pattern="dd-MM-yyyy")
 	private LocalDateTime fechaHora;
+	private String clave;
+	private String nameEvento;
 	
 }

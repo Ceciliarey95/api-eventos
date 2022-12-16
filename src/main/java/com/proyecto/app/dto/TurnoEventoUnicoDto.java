@@ -1,9 +1,5 @@
 package com.proyecto.app.dto;
 
-import javax.validation.constraints.NotEmpty;
-
-import com.proyecto.app.entity.Usuario;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +13,6 @@ import lombok.ToString;
 @AllArgsConstructor
 public class TurnoEventoUnicoDto {
 	
-	@NotEmpty(message="El usuario no puede estar vacio")
-	private Usuario usuario;
-	
+	private String clave;
+	private String nameEvento;
 }

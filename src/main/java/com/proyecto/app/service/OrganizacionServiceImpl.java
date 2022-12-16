@@ -66,7 +66,7 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 
 	@Override
 	public OrganizacionDto delete(OrganizacionDto organizacionDto) {
-		Organizacion orgExist = organizacionDao.findByCuit(organizacionDto.getCuit());
+		Organizacion orgExist = organizacionDao.findByClave(organizacionDto.getClave());
 		if(orgExist != null) {
 			Organizacion entityToPersist = new Organizacion();
 			
@@ -100,6 +100,7 @@ public class OrganizacionServiceImpl implements IOrganizacionService {
 	@Override
 	public Organizacion findByClave(String clave) {
 		Organizacion organizacion = organizacionDao.findByClave(clave);
+		System.out.println(organizacion);
 		return organizacion;
 	}
 

@@ -5,8 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.proyecto.app.dto.EventoRecurrDto;
 import com.proyecto.app.dto.EventoUnicoDto;
 import com.proyecto.app.entity.Evento;
+import com.proyecto.app.entity.Organizacion;
 import com.proyecto.app.repository.IEventoDao;
 import com.proyecto.app.wrapper.EventoWrapper;
 
@@ -45,7 +48,9 @@ public class EventoServiceImpl implements IEventoService {
 		Evento eventoExist = eventoDao.findByName(evento.getName());
 		if(eventoExist  != null) {
 			EventoUnicoDto eventoUnicoDto = EventoWrapper.entityToDtoU(eventoExist);
+			EventoRecurrDto eventoRecurrDto = EventoWrapper.entityToDtoR(eventoExist);
 			Evento entityToPersist = new Evento();
+			if(eventoUnicoDto!=null) {
 			
 			entityToPersist.setId(eventoExist.getId());
 			entityToPersist.setDireccion(eventoUnicoDto.getDireccion());
@@ -54,9 +59,23 @@ public class EventoServiceImpl implements IEventoService {
 			entityToPersist.setFechaAlta(eventoExist.getFechaAlta());
 			entityToPersist.setEventoUnico(eventoExist.getEventoUnico());
 			entityToPersist.setFechaEvento(eventoUnicoDto.getFechaEvento());
+			entityToPersist.setTurnos(eventoExist.getTurnos());
+			entityToPersist.setOrganizacion(eventoExist.getOrganizacion());
+			
 			eventoExist = eventoDao.save(entityToPersist);
-			return eventoExist;
-		}
+			return eventoExist;}else {
+				entityToPersist.setId(eventoExist.getId());
+				entityToPersist.setDireccion(eventoRecurrDto.getDireccion());
+				entityToPersist.setName(eventoRecurrDto.getName());
+				entityToPersist.setActivo(eventoExist.getActivo());
+				entityToPersist.setFechaAlta(eventoExist.getFechaAlta());
+				entityToPersist.setEventoUnico(eventoExist.getEventoUnico());
+				entityToPersist.setFechaEvento(eventoExist.getFechaEvento());
+				entityToPersist.setTurnos(eventoExist.getTurnos());
+				entityToPersist.setOrganizacion(eventoExist.getOrganizacion());
+			
+				eventoExist = eventoDao.save(entityToPersist);
+			return eventoExist;}}
 		return null;
 	}
 
@@ -71,7 +90,9 @@ public class EventoServiceImpl implements IEventoService {
 			entityToPersist.setActivo(Boolean.FALSE);
 			entityToPersist.setFechaAlta(eventoExist.getFechaAlta());
 			entityToPersist.setEventoUnico(eventoExist.getEventoUnico());
-			entityToPersist.setFechaEvento(eventoExist.getFechaEvento());			
+			entityToPersist.setFechaEvento(eventoExist.getFechaEvento());	
+			entityToPersist.setOrganizacion(eventoExist.getOrganizacion());
+
 			eventoExist = eventoDao.save(entityToPersist);
 			return evento;
 		}
@@ -79,8 +100,8 @@ public class EventoServiceImpl implements IEventoService {
 	}
 		
 	@Override
-	public List<Evento> findByOrganizacion(Long id){
-		List<Evento> eventos = eventoDao.findByOrganizacion(id);
+	public List<Evento> findByOrganizacion(Organizacion org){
+		List<Evento> eventos = eventoDao.findByOrganizacion(org);
 		return eventos;
 	}
 

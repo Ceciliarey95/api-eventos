@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.proyecto.app.dto.OrganizacionDto;
 import com.proyecto.app.entity.Organizacion;
@@ -46,7 +45,7 @@ public class OrganizacionController {
 	public ResponseEntity<Map<String, Object>> findByCuit(@PathVariable(name = "cuit") String cuit){
 		Map<String, Object> response = new HashMap<>();
 		Organizacion newOrg = organizacionService.findByCuit(cuit);
-		if (newOrg != null) {
+		if (newOrg != null && newOrg.getDeleted()!=true ) {
 		response.put("Organizacion: ", newOrg);
 		}else{
 		response.put("mensaje", "La organizacion con Cuit: "+ cuit +" no existe");
@@ -58,7 +57,11 @@ public class OrganizacionController {
 	public ResponseEntity<Map<String, Object>> findByNombre(@PathVariable(name = "name") String name){
 		Map<String, Object> response = new HashMap<>();
 		Organizacion org = organizacionService.findByName(name);
-		response.put("Organización: ",org );
+		if (org != null && org.getDeleted()!=true ) {
+			response.put("Organización: ",org );
+		}else{
+			response.put("mensaje", "La organizacion con nombre: "+ name +" no existe");
+			}
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
@@ -85,13 +88,13 @@ public class OrganizacionController {
 	}
 	
 	@DeleteMapping("/delete")
-	  public ResponseEntity<Map<String, Object>> deleteOrg(@RequestParam(value="clave",required = true) String clave) {
+	  public ResponseEntity<Map<String, Object>> deleteOrg(@RequestBody String clave) {
 		Map<String, Object> response = new HashMap<>();
 		Organizacion org = organizacionService.findByClave(clave);
-		if (org != null) {
 		OrganizacionDto orgDto = OrganizacionWrapper.entityToDto(org);
-		OrganizacionDto updateOrg = organizacionService.delete(orgDto);
-		response.put("Organizacion eliminada: ", updateOrg);
+		if (org != null) {
+			OrganizacionDto orgDtoEliminada = organizacionService.delete(orgDto);
+			response.put("Organizacion eliminada: ", orgDtoEliminada);
 		}else{
 			response.put("mensaje", "No se pudo borrar la informacion de la organizacion porque no existe.");
 		}

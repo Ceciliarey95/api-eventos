@@ -1,8 +1,6 @@
 package com.proyecto.app.dto;
 
 import java.time.LocalDateTime;
-
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
@@ -26,9 +24,9 @@ public class EventoUnicoDto {
 	private String name;
 	@NotBlank(message = "El campo direccion no puede estar vacio")
 	private String direccion;
-	@AssertTrue
-	private Boolean eventoUnico;
 	@Future
     @DateTimeFormat(pattern="dd-MM-yyyy")
 	private LocalDateTime fechaEvento;
+	private String clave;
+
 }

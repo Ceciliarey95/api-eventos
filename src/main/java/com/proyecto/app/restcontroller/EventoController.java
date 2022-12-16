@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.proyecto.app.dto.EventoRecurrDto;
 import com.proyecto.app.dto.EventoUnicoDto;
 import com.proyecto.app.entity.Evento;
+import com.proyecto.app.entity.Organizacion;
 import com.proyecto.app.repository.IOrganizacionDao;
 import com.proyecto.app.service.IEventoService;
+import com.proyecto.app.service.IOrganizacionService;
 import com.proyecto.app.wrapper.EventoWrapper;
 
 @RequestMapping("api/eventos")
@@ -33,6 +35,8 @@ public class EventoController {
 	private IEventoService eventoService;
 	@Autowired
 	private IOrganizacionDao orgDao;
+	@Autowired
+	private IOrganizacionService organizacionService;
 	
 	@GetMapping("/evento/{nombre}")
 	public ResponseEntity<Map<String, Object>> findByName(@PathVariable(name = "nombre") String nombre){
@@ -43,56 +47,84 @@ public class EventoController {
 	}
 
 	@PostMapping("/registroEventoUnico")
-	public ResponseEntity<Map<String, Object>> newEventoUnico( @RequestBody @Valid EventoUnicoDto eventoUnicoDto,String clave) {
+	public ResponseEntity<Map<String, Object>> newEventoUnico( @RequestBody @Valid EventoUnicoDto eventoUnicoDto ) {
 		Map<String, Object> response = new HashMap<>();
-		if(orgDao.findByClave(clave)!= null) {
+		Organizacion org = organizacionService.findByClave(eventoUnicoDto.getClave());
+		if(org!= null) {
 			Evento evento = EventoWrapper.dtoToEntityU(eventoUnicoDto);
+			evento.setOrganizacion(org);
 			evento = eventoService.save(evento);
-			response.put("Mensaje: ", "Evento guardado con éxito!");}
+			response.put("Mensaje: ", "Evento guardado con éxito!");
+			}else {
+				response.put("Mensaje:", "El evento no se pudo registrar con éxito.");}
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
+	
 	@PostMapping("/registroEventoRecurr")
-	public ResponseEntity<Map<String, Object>> newEventoRecurr( @RequestBody @Valid EventoRecurrDto eventoRecurrDto,String clave) {
+	public ResponseEntity<Map<String, Object>> newEventoRecurr( @RequestBody @Valid EventoRecurrDto eventoRecurrDto) {
 		Map<String, Object> response = new HashMap<>();
-		if(orgDao.findByClave(clave)!= null) {
+		Organizacion org = organizacionService.findByClave(eventoRecurrDto.getClave());
+		if(org != null) {
 			Evento evento = EventoWrapper.dtoToEntityR(eventoRecurrDto);
+			evento.setOrganizacion(org);
 			evento = eventoService.save(evento);
-			response.put("Mensaje: ", "Evento guardado con éxito!");}
+			response.put("Mensaje: ", "Evento guardado con éxito!");
+			}else {
+				response.put("Mensaje: ", "No se pudo registrar el evento");}
+		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
+	}
+
+	@PutMapping("/updateEventoRecurr/{name}")
+	public ResponseEntity<Map<String, Object>> updateR(@PathVariable (name="name") String name,@RequestBody EventoRecurrDto eventoRecurrDto){
+		Map<String, Object> response = new HashMap<>();
+		Organizacion org = organizacionService.findByClave(eventoRecurrDto.getClave());
+		Evento evento    = eventoService.findByName(name);
+		Evento eventoR = EventoWrapper.dtoToEntityR(eventoRecurrDto);
+		if(org !=null && (org.getId()==evento.getOrganizacion().getId()) ){
+			eventoR.setOrganizacion(org);
+			evento = eventoService.update(eventoR);
+			response.put("Mensaje: ", "Evento actualizado!");
+			}else{
+			response.put("Mensaje: ", "La clave es incorrecta o no corresponde a la organizacion encargada de este evento!");}
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateEventoUnico/")
-	public ResponseEntity<Map<String, Object>> update(@RequestBody EventoUnicoDto eventoUnicoDto, String claveOrg){
+	@PutMapping("/updateEventoUnico/{name}")
+	public ResponseEntity<Map<String, Object>> updateU(@PathVariable (name="name") String name, @RequestBody EventoUnicoDto eventoUnicoDto){
 		Map<String, Object> response = new HashMap<>();
-		if(orgDao.findByClave(claveOrg)!=null){
-			Evento evento = EventoWrapper.dtoToEntityU(eventoUnicoDto);
-		    Evento updateEvento = eventoService.update(evento);
-		    if(updateEvento == null) {
-		    	response.put("mensaje", "No se pudo actualizar la informacion del evento.");
-		    }
-		response.put("Evento: ", updateEvento);}
-		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
-	}
-	@PutMapping("/updateEventoRecurr/")
-	public ResponseEntity<Map<String, Object>> update(@RequestBody EventoRecurrDto eventoRecurrDto, String claveOrg){
-		Map<String, Object> response = new HashMap<>();
-		if(orgDao.findByClave(claveOrg)!=null){
-			Evento evento = EventoWrapper.dtoToEntityR(eventoRecurrDto);
-			Evento updateEvento = eventoService.update(evento);
-			if(updateEvento == null) {
-				response.put("mensaje", "No se pudo actualizar la informacion del evento.");
-				}
-			response.put("Evento: ", updateEvento);}
+		//Obtengo la organizacion con la clave por body
+		Organizacion org = organizacionService.findByClave(eventoUnicoDto.getClave());
+		//Obtengo el evento con el nombre en el path
+		Evento evento    = eventoService.findByName(name);
+		//Paso el evento que se pasó en el body a una entidad
+		Evento eventoU   = EventoWrapper.dtoToEntityU(eventoUnicoDto);
+		//Validamos la clave y que este evento corresponda a esta organización
+		if(org !=null && (org.getId()==evento.getOrganizacion().getId())){
+			//Guardo el evento que se pasó en el body como la entidad que obtuvimos
+			eventoU.setOrganizacion(org);
+			evento = eventoService.save(eventoU);
+			response.put("Mensaje: ", "Evento actualizado!");
+			return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
+			}else {
+			response.put("Mensaje: ", "La clave es incorrecta o no corresponde a la organizacion encargada de este evento!");
+			}
+		response.put("Mensaje: ", "No se pudo actualizar el evento!");
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/delete/")
-	  public ResponseEntity<Map<String, Object>> deleteOrg(@RequestBody String name, String claveOrg) {
+	
+	@DeleteMapping("/delete/{nombreEvento}")
+	  public ResponseEntity<Map<String, Object>> deleteOrg(@PathVariable (name="nombreEvento") String name,@RequestBody String clave) {
 		Map<String, Object> response = new HashMap<>();
-		if(orgDao.findByClave(claveOrg)!=null){
-			Evento evento = eventoService.findByName(name);
+		Evento evento = eventoService.findByName(name);
+		EventoUnicoDto eventoUDto = EventoWrapper.entityToDtoU(evento);
+		EventoRecurrDto eventoRDto = EventoWrapper.entityToDtoR(evento);
+		if(eventoUDto!=null || eventoRDto!=null){
+			if(orgDao.findByClave(clave)!=null ) {			
 			Evento updateEvento = eventoService.delete(evento);
-			response.put("Evento eliminado: ", updateEvento);}
+			response.put("Evento eliminado: ", updateEvento);}else{
+				response.put("Mensaje: ","La clave es incorrecta");}}else{
+					response.put("Mensaje:" , "No exise el evento!"); }
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	  }
 

@@ -7,43 +7,48 @@ import com.proyecto.app.entity.Evento;
 public class EventoWrapper {
 	
 	public static Evento dtoToEntityU(EventoUnicoDto dto) {
-		if(dto == null) return new Evento();
+		if(dto == null) {return new Evento();}
 		
 		Evento entity = new Evento();
 		entity.setName(dto.getName());
 		entity.setDireccion(dto.getDireccion());
-		entity.setEventoUnico(dto.getEventoUnico());
+		entity.setEventoUnico(Boolean.TRUE);
 		entity.setActivo(Boolean.TRUE);
 		entity.setFechaEvento(dto.getFechaEvento());
+		entity.setFechaAlta(entity.getFechaAlta());
+		entity.setOrganizacion(entity.getOrganizacion());
+		entity.setTurnos(entity.getTurnos());
 		
 		return entity;
 	}
 	
 	public static EventoUnicoDto entityToDtoU(Evento entity) {
-		if(entity == null) return new EventoUnicoDto();
+		if(entity == null) {return new EventoUnicoDto();}
 		
 		EventoUnicoDto dto = new EventoUnicoDto();
 		dto.setName(entity.getName());
 		dto.setDireccion(entity.getDireccion());
-		dto.setEventoUnico(entity.getEventoUnico());
 		dto.setFechaEvento(entity.getFechaEvento());
 				
 		return dto;
 	}
 	public static Evento dtoToEntityR(EventoRecurrDto dto) {
-		if(dto == null) return new Evento();
+		if(dto == null) {return new Evento();}
 		
 		Evento entity = new Evento();
 		entity.setName(dto.getName());
 		entity.setDireccion(dto.getDireccion());
 		entity.setEventoUnico(Boolean.FALSE);
 		entity.setActivo(Boolean.TRUE);
+		entity.setFechaAlta(entity.getFechaAlta());
+		entity.setOrganizacion(entity.getOrganizacion());
+		entity.setTurnos(entity.getTurnos());
 		
 		return entity;
 	}
 	
 	public static EventoRecurrDto entityToDtoR(Evento entity) {
-		if(entity == null) return new EventoRecurrDto();
+		if(entity == null) { return new EventoRecurrDto();}
 		
 		EventoRecurrDto dto = new EventoRecurrDto();
 		dto.setName(entity.getName());
