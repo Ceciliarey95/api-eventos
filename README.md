@@ -12,7 +12,7 @@ Contiene:
 ➢	Data Base
 ➢	Wrappers (para convertir entity a dto)
 ➢	Capturar errores con RestControllerAdvice
-➢	Implementar Swagger
+➢	Implementando Swagger
 ➢	Relaciones entre entities
 
 Maven - Manejador de dependencias
