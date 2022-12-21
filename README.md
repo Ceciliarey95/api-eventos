@@ -19,6 +19,3 @@ Maven - Manejador de dependencias
 
 Autora ✒️
 Cecilia Rey 
-
-Licencia 📄
-Este proyecto está bajo la Licencia (©CeciliaRey) - mira el archivo LICENSE.md para detalles
